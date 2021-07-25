@@ -1,16 +1,18 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+const app = express();
 
-// main app
-const app = express()
+const cors = require('cors');
+app.use(cors());
 
-// apply middleware
-app.use(cors())
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
 
-// main route
-const response = (req, res) => res.status(200).send('<h1>REST API JCWM16AH</h1>')
-app.get('/', response)
+const routes = require('./routes');
+const platform = require('./platform');
 
-// bind to local machine
-const PORT = process.env.PORT || 2000
-app.listen(PORT, () => `CONNECTED : port ${PORT}`)
+app.use('/', routes);
+
+app.listen(platform.port, ()=>{
+    console.log(`Listening to port ${platform.port}...`)
+})
